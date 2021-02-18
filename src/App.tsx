@@ -8,7 +8,7 @@ const menu = [
   },
   {
     icon: 'video-camera',
-    title: '追踪'
+    title: '追踪策略'
   }
 ];
 
