@@ -3,6 +3,7 @@
  */
 
 import { setStorageItem, getStorageItem } from 'src/chrome/storage';
+import Vue from 'vue'
 
 export interface StrategyForm {
   origin: string;
@@ -40,7 +41,7 @@ class StrategyStorage {
   public strategyList: StrategyForm[] = [];
   public strategyStr = '';
 
-  public async get (refresh: boolean): Promise<StrategyForm[]> {
+  public async get (refresh: boolean) {
     if (this.strategyList.length > 0) {
       return this.strategyList;
     }
@@ -49,14 +50,25 @@ class StrategyStorage {
       return this.strategyList;
     }
 
-    const value = await getStorageItem(strategyID);
-    this.strategyStr = value;
-    return this.strategyList = parseStrategy(value);
+    try {
+      const value = await getStorageItem(strategyID);
+      this.strategyStr = (value as string);
+      return this.strategyList = parseStrategy(value as string);
+    } catch (err) {
+      console.error(err);
+      Vue.prototype.$message.error(err.message);
+      return [];
+    }
   }
 
-  public set (form: StrategyForm) {
-    // 写入到storage中
-    return setStorageItem(strategyID, strategyStringify(form, this.strategyStr));
+  public async set (form: StrategyForm) {
+    try {
+      await setStorageItem(strategyID, strategyStringify(form, this.strategyStr));
+    } catch (err) {
+      console.error(err);
+      Vue.prototype.$message.error(err.message);
+      return Promise.reject(err);
+    }
   }
 }
 

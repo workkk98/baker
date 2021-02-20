@@ -7,6 +7,11 @@ import { Modal } from 'ant-design-vue';
 import { CreateElement } from 'vue';
 import { StrategyForm, strategyStorage } from '../api/';
 
+interface CreateStrategyForm extends StrategyForm {
+  originProtocol: string;
+  targetProtocol: string;
+}
+
 function createSelectOption (h: CreateElement, value: string) {
   return h('a-select-option', {
     props: {
@@ -16,7 +21,7 @@ function createSelectOption (h: CreateElement, value: string) {
 }
 
 // 创建目标url和源url的输入框
-function createURLInput (h: CreateElement, form: StrategyForm, key: keyof StrategyForm) {
+function createURLInput (h: CreateElement, form: CreateStrategyForm, key: 'origin' | 'target') {
   return h('a-input', {
     props: {
       value: form[key]
@@ -28,9 +33,15 @@ function createURLInput (h: CreateElement, form: StrategyForm, key: keyof Strate
     h('a-select', 
       {
         slot: 'addonBefore',
-        attrs: {
-          'default-value': "http://"
+        props: {
+          // 'default-value': 'http://'
+          value: form[(key+'Protocol' as 'originProtocol' | 'targetProtocol')]
         },
+        on: {
+          change: (val: string) => { 
+            form[(key+'Protocol' as 'originProtocol' | 'targetProtocol')] = val;
+          }
+        }
       },
       [
         createSelectOption(h, 'http://'),
@@ -56,7 +67,7 @@ function createStrategyRadio (h: CreateElement, form: StrategyForm, key: keyof S
     }, ['拷贝策略'])
   ])
 }
-function createModalContent (form: StrategyForm) {
+function createModalContentFn (form: CreateStrategyForm) {
   return function (h: CreateElement) {
     return h('a-form', 
     {
@@ -102,20 +113,30 @@ function createModalContent (form: StrategyForm) {
 }
 
 export default function openCreateModal () {
-  const form: StrategyForm = {
+
+  // 这里这么做是因为select组件，originProtocol变成响应式后select选中的值才会更新上去
+  const form = Vue.observable({
     origin: '',
+    originProtocol: 'http://',
     name: '',
     target: '',
-    strategy: ''
-  };
+    strategy: 'copy',
+    targetProtocol: 'http://'
+  });
   return Modal?.confirm({
     title: '创建策略',
     width: 600,
-    content: createModalContent(form),
+    content: createModalContentFn(form),
     onOk: async () => {
       console.log(form);
-      await strategyStorage.set(form);
-      Vue.prototype.$message.success('设置cookie成功');
+      const { origin, originProtocol, name, target, strategy, targetProtocol } = form;
+      await strategyStorage.set({
+        origin: originProtocol + origin,
+        name,
+        target: targetProtocol + target,
+        strategy
+      });
+      Vue.prototype.$message.success('策略创建成功');
     }
   });
 }

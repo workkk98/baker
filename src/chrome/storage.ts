@@ -3,24 +3,33 @@
  * @param {*} key 
  * @param {*} value 
  */
-export function setStorageItem (key: string, value: any) {
+export function setStorageItem (key: string, value: any): Promise< true | chrome.runtime.LastError> {
   return new Promise((resolve, reject) => {
     chrome.storage?.sync?.set({[key]: value}, function() {
-      resolve(null);
+
+      if (chrome.runtime?.lastError) {
+        reject(chrome.runtime.lastError);
+        chrome.runtime.lastError = void 0;
+        return;
+      }
+      resolve(true);
     });
   });
 }
 
 /**
- * 第一个参数是[key],对应chrome.storage.sync.set第一个参数的key。
- * TODO: 错误机制
+ * 获取单个键值对
  * @param { Array } key
  */
-export function getStorageItem (key: string): Promise<string> {
+export function getStorageItem (key: string): Promise<string | chrome.runtime.LastError> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get([key], function (value) {
-      if (!value[key]) {
-        return reject();
+    chrome.storage?.sync?.get([key], function (value) {
+      console.log('storage.sync.get: ', value[key]);
+
+      if (chrome.runtime?.lastError) {
+        reject(chrome.runtime.lastError);
+        chrome.runtime.lastError = void 0;
+        return;
       }
       resolve(value[key]);
     });
