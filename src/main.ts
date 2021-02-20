@@ -12,10 +12,10 @@ import {
   Input,
   Modal,
   Form,
-  message
+  message,
+  Select,
+  Radio
 } from 'ant-design-vue';
-
-import App from './App'
 
 Vue.config.productionTip = false
 
@@ -28,8 +28,14 @@ Vue.use(Divider);
 Vue.use(Input);
 Vue.use(Form);
 Vue.use(Modal);
+Vue.use(Select);
+Vue.use(Radio);
 
 Vue.prototype.$message = message;
+
+import App from './App'
+
+import './plugin/trace';
 
 new Vue({
   render: h => h(App)

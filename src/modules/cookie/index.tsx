@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
-import openEditForm from './edit-cookie/index';
+import openEditForm from './edit-cookie/';
 import { fetchAllCookie, removeCookie } from './api';
 
 const columns = [
@@ -22,7 +22,6 @@ const columns = [
     title: '路径',
     key: 'path',
     dataIndex: 'path',
-    scopedSlots: { customRender: 'tags' },
     width: 300
   },
   {

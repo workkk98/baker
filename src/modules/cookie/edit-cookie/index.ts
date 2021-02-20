@@ -22,7 +22,7 @@ function createModalContentFn (form: chrome.cookies.Cookie) {
     return h('a-form', {
       props: {
         labelCol: { span: 5 },
-        wrapperCol: { span: 24 }
+        wrapperCol: { span: 16 }
       }
     }, [
       h('a-form-item', {

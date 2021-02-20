@@ -1,5 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import CookieTable from './modules/cookie/index';
+import TraceTable from './modules/trace/index';
 
 const menu = [
   {
@@ -14,16 +15,17 @@ const menu = [
 
 @Component({
   components: {
-    CookieTable
+    CookieTable,
+    TraceTable
   }
 })
 export default class App extends Vue {
   private collapsed = false;
 
+  private ctorKey = '0';
+
   public render () {
     const menu = this.createMenu();
-
-    const cookieTable = this.createCookie();
 
     return <a-layout>
       <a-layout-sider collapsed={this.collapsed}
@@ -40,7 +42,7 @@ export default class App extends Vue {
           />
         </a-layout-header>
         <a-layout-content style="margin: 24px 16px; padding: 24px; background: rgb(255, 255, 255); min-height: 600px">
-          { cookieTable }
+          { this.createComponent() }
         </a-layout-content>
       </a-layout>
     </a-layout>;
@@ -48,18 +50,37 @@ export default class App extends Vue {
 
   public createMenu () {
     const children = menu.map((val,index) => {
-      return <a-menu-item key={index}>
+      return <a-menu-item 
+        key={index.toString()}>
         <a-icon type={val.icon} />
         <span>{val.title}</span>
       </a-menu-item>
     });
 
-    return <a-menu theme="dark" mode="inline">
+    return <a-menu
+      theme="dark"
+      mode="inline"
+      default-selected-keys={['0']}
+      onClick={this.selectComponent}>
       {children}
     </a-menu>;
   }
 
-  createCookie () {
-    return <cookie-table />
+  public createCookie () {
+    return <cookie-table />;
+  }
+
+  public createTrace () {
+    return <trace-table></trace-table>;
+  }
+
+  public createComponent () {
+    const createFnList = [this.createCookie, this.createTrace];
+    return createFnList[Number(this.ctorKey)]();
+  }
+
+  public selectComponent (value: { key: string }) {
+    this.ctorKey = value.key; 
+    this.$forceUpdate();
   }
 }
