@@ -53,8 +53,11 @@ function createURLInput (h: CreateElement, form: CreateStrategyForm, key: 'origi
 //创建策略名称radio
 function createStrategyRadio (h: CreateElement, form: StrategyForm, key: keyof StrategyForm) {
   return h('a-radio-group', {
+    props: {
+      value: form[key]
+    },
     attrs: {
-      'button-style': 'solid'
+      'button-style': 'solid',
     },
     on: {
       input: (val: string) => form[key] = val

@@ -52,6 +52,12 @@ export default class TraceTable extends Vue {
         onClick={this.fetchData}>
         刷新策略
       </a-button>
+      <a-divider type="vertical" />
+      <a-button 
+        type="primary"
+        onClick={this.removeAll}>
+        移除所有
+      </a-button>
       <a-table
         style="margin-top: 16px"
         columns={columns}
@@ -60,6 +66,9 @@ export default class TraceTable extends Vue {
     </div>
   }
 
+  /**
+   * 获取data，每次都会强制刷新
+   */
   public async fetchData () {
     const strategyData = await strategyStorage.get(true);
     this.data = strategyData.map((val, index) => {
@@ -68,5 +77,11 @@ export default class TraceTable extends Vue {
         ...val
       }
     })
+  }
+
+  public async removeAll () {
+    await strategyStorage.removeAll();
+    Vue.prototype.$message.success('移除成功');
+    this.fetchData();
   }
 }

@@ -2,7 +2,7 @@
  * @file 操作storage的类
  */
 
-import { setStorageItem, getStorageItem } from 'src/chrome/storage';
+import { setStorageItem, getStorageItem, removeStorageItem } from 'src/chrome/storage';
 import Vue from 'vue'
 
 export interface StrategyForm {
@@ -42,13 +42,11 @@ class StrategyStorage {
   public strategyStr = '';
 
   public async get (refresh: boolean) {
-    if (this.strategyList.length > 0) {
+    if (!refresh && this.strategyList.length > 0) {
       return this.strategyList;
     }
 
-    if (!refresh) {
-      return this.strategyList;
-    }
+    // refresh，或strategyList的长度等于0都强制刷新
 
     try {
       const value = await getStorageItem(strategyID);
@@ -64,6 +62,16 @@ class StrategyStorage {
   public async set (form: StrategyForm) {
     try {
       await setStorageItem(strategyID, strategyStringify(form, this.strategyStr));
+    } catch (err) {
+      console.error(err);
+      Vue.prototype.$message.error(err.message);
+      return Promise.reject(err);
+    }
+  }
+
+  public async removeAll () {
+    try {
+      await removeStorageItem(strategyID);
     } catch (err) {
       console.error(err);
       Vue.prototype.$message.error(err.message);

@@ -31,7 +31,27 @@ export function getStorageItem (key: string): Promise<string | chrome.runtime.La
         chrome.runtime.lastError = void 0;
         return;
       }
-      resolve(value[key]);
+
+      // 未写入storage则未分配值。
+      resolve(value[key] ?? '');
     });
   });
+}
+
+/**
+ * 移除storage中的某个字段
+ */
+export function removeStorageItem (key: string): Promise< true | chrome.runtime.LastError> {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.remove(key, () => {
+
+      if (chrome.runtime?.lastError) {
+        reject(chrome.runtime.lastError);
+        chrome.runtime.lastError = void 0;
+        return;
+      }
+
+      resolve(true);
+    });
+  })
 }
