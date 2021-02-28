@@ -28,9 +28,6 @@ const data = [
 
 export async function fetchAllCookie (): Promise<DataCookie[]> {
   return new Promise(resolve => {
-    chrome.cookies?.getAll({}, function(cookies: chrome.cookies.Cookie[]) {
-      resolve(cookies);
-    });
     chrome.cookies ? chrome.cookies.getAll({}, function(cookies: chrome.cookies.Cookie[]) {
       resolve(cookies);
     }) : resolve(data);

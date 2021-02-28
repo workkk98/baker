@@ -41,7 +41,7 @@ export default class App extends Vue {
             onClick={() => (this.collapsed = !this.collapsed)}
           />
         </a-layout-header>
-        <a-layout-content style="margin: 24px 16px; padding: 24px; background: rgb(255, 255, 255); min-height: 600px">
+        <a-layout-content style="margin: 24px 16px; padding: 24px; background: rgb(255, 255, 255); height: 100vh; min-height: 600px">
           { this.createComponent() }
         </a-layout-content>
       </a-layout>

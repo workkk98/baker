@@ -1,3 +1,7 @@
+/**
+ * @file 策略文件
+ */
+
 import { setCookie } from 'src/chrome/cookies';
 
 abstract class TraceStrategy {

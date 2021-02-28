@@ -1,5 +1,6 @@
 import { strategyStorage } from 'src/modules/trace/api';
 import { traceStrategyList } from 'src/modules/trace/api/strategy';
+import { createUrlFromCookie } from 'src/utilty/url';
 
 /**
  * 执行策略
@@ -25,10 +26,7 @@ chrome.cookies?.onChanged?.addListener(function(info: chrome.cookies.CookieChang
   if (info.removed) {
     return;
   }
-  const { domain, path, secure } = info.cookie,
-    url =`http${secure? 's' : ''}://` + domain + path;
 
-  // eslint-disabled
-  console.log(url);
-  excuteStrategy(url, info.cookie);
+  console.log('cookie变动', info.cookie);
+  excuteStrategy(createUrlFromCookie(info.cookie), info.cookie);
 });

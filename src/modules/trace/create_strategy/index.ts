@@ -6,6 +6,7 @@ import { Vue } from 'vue-property-decorator';
 import { Modal } from 'ant-design-vue';
 import { CreateElement } from 'vue';
 import { StrategyForm, strategyStorage } from '../api/';
+import copyThenPaste from '../api/copy-paste';
 
 interface CreateStrategyForm extends StrategyForm {
   originProtocol: string;
@@ -133,12 +134,17 @@ export default function openCreateModal () {
     onOk: async () => {
       console.log(form);
       const { origin, originProtocol, name, target, strategy, targetProtocol } = form;
+
+      // 将这条规则写入到stroage中
       await strategyStorage.set({
         origin: originProtocol + origin,
         name,
         target: targetProtocol + target,
         strategy
       });
+
+      // 立即生效此条规则
+      copyThenPaste(originProtocol + origin, targetProtocol + target, name);
       Vue.prototype.$message.success('策略创建成功');
     }
   });
