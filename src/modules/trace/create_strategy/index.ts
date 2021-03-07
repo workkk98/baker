@@ -7,6 +7,7 @@ import { Modal } from 'ant-design-vue';
 import { CreateElement } from 'vue';
 import { StrategyForm, strategyStorage } from '../api/';
 import copyThenPaste from '../api/copy-paste';
+import { validateForm } from '../api/validate/index';
 
 interface CreateStrategyForm extends StrategyForm {
   originProtocol: string;
@@ -116,7 +117,7 @@ function createModalContentFn (form: CreateStrategyForm) {
   }
 }
 
-export default function openCreateModal () {
+export default function openCreateModal (successCb: () => void) {
 
   // 这里这么做是因为select组件，originProtocol变成响应式后select选中的值才会更新上去
   const form = Vue.observable({
@@ -135,6 +136,11 @@ export default function openCreateModal () {
       console.log(form);
       const { origin, originProtocol, name, target, strategy, targetProtocol } = form;
 
+      if (!validateForm(name, origin, target)) {
+        Vue.prototype.$message.error('请检查form表单');
+        return;
+      }
+
       // 将这条规则写入到stroage中
       await strategyStorage.set({
         origin: originProtocol + origin,
@@ -146,6 +152,8 @@ export default function openCreateModal () {
       // 立即生效此条规则
       copyThenPaste(originProtocol + origin, targetProtocol + target, name);
       Vue.prototype.$message.success('策略创建成功');
+
+      successCb();
     }
   });
 }
