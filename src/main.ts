@@ -14,7 +14,8 @@ import {
   Form,
   message,
   Select,
-  Radio
+  Radio,
+  Tooltip
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false
@@ -30,6 +31,7 @@ Vue.use(Form);
 Vue.use(Modal);
 Vue.use(Select);
 Vue.use(Radio);
+Vue.use(Tooltip);
 
 Vue.prototype.$message = message;
 

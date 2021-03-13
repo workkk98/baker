@@ -13,9 +13,9 @@ interface DataCookie {
 
 const data = [
   {
-    name: 'visitorid',
-    value: '0f6803174d7c00001cbe2b6038000000290b0000',
-    domain: 'www.bmw.com.cn',
+    name: 'visitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitoridvisitorid',
+    value: '0f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b00000f6803174d7c00001cbe2b6038000000290b0000',
+    domain: 'www.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cnwww.bmw.com.cn',
     path: '/content/bmw/marketCN/bmw_com_cn/zh_CN/index/jcr:content/par/multicontent/tabs/multicontenttab_414046302/items/smallteaser_1006813621/image.transform/smallteaser'
   },
   {
@@ -30,7 +30,7 @@ export async function fetchAllCookie (): Promise<DataCookie[]> {
   return new Promise(resolve => {
     chrome.cookies ? chrome.cookies.getAll({}, function(cookies: chrome.cookies.Cookie[]) {
       resolve(cookies);
-    }) : resolve(data);
+    }) : resolve(new Array(20).fill(data[0]));
   });
 }
 

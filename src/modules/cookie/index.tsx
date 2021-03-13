@@ -7,27 +7,34 @@ const columns = [
     title: '名称',
     dataIndex: 'name',
     key: 'name',
+    width: 200,
+    ellipsis: true
   },
   {
     title: '值',
     dataIndex: 'value',
     key: 'value',
+    width: 400,
+    ellipsis: true
   },
   {
     title: '域名',
     dataIndex: 'domain',
     key: 'domain',
+    width: 300,
+    ellipsis: true
   },
   {
     title: '路径',
     key: 'path',
     dataIndex: 'path',
-    width: 300
+    ellipsis: true
   },
   {
     title: '操作',
     key: 'action',
     scopedSlots: { customRender: 'action' },
+    width: 160
   },
 ];
 
